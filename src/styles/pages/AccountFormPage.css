@@ -1,0 +1,23 @@
+.form-card { margin-bottom: 16px; }
+.form-header { justify-content: space-between; align-items: center; }
+.title { margin: 0; }
+
+.grid-2 {
+  display: grid;
+  gap: 12px;
+}
+@media (min-width: 700px) {
+  .grid-2 { grid-template-columns: 1fr 1fr; }
+}
+
+.actions {
+  margin-top: 12px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.hint { margin: 0; color: var(--muted); }
+
+.row.gap-8 { gap: 8px; }
+button.danger { background: var(--danger); }

@@ -29,11 +29,19 @@ export default function AccountsListPage() {
 
   return (
     <div className="container">
+      {}
       <div className="card accounts-header">
-        <div className="row" style={{ justifyContent: "space-between" }}>
-          <h1 style={{ margin: 0 }}>Cuentas</h1>
-          <div className="accounts-search">
-            <SearchBar value={search} onChange={(v) => { setPage(1); setSearch(v); }} />
+        <div className="header-row">
+          <h1 className="title">Cuentas</h1>
+
+          <div className="actions">
+            <div className="accounts-search">
+              <SearchBar value={search} onChange={(v) => { setPage(1); setSearch(v); }} />
+            </div>
+
+            <Link to="/accounts/new">
+              <button>Crear cuenta</button>
+            </Link>
           </div>
         </div>
       </div>

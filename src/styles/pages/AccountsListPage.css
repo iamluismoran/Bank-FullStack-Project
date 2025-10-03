@@ -1,4 +1,29 @@
+/* Página: Listado de Cuentas */
 .accounts-header { margin-bottom: 16px; }
-.accounts-search { width: 320px; max-width: 100%; }
+
+/* fila superior del header del listado */
+.header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.title { margin: 0; }
+
+.accounts-search {
+  width: 320px;
+  max-width: 100%;
+}
+
+/* contenedor del buscador + botón crear */
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
 .table-wrap { overflow-x: auto; }
+
 .accounts-pagination { margin-top: 12px; }

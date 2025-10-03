@@ -2,6 +2,7 @@ import { createBrowserRouter, Navigate } from "react-router-dom";
 import App from "../App";
 import AccountsListPage from "../pages/AccountsListPage";
 import AccountDetailPage from "../pages/AccountDetailPage";
+import AccountFormPage from "../pages/AccountFormPage";
 
 function LoginPlaceholder() {
   return (
@@ -22,6 +23,8 @@ const router = createBrowserRouter([
       { index: true, element: <Navigate to="/accounts" replace /> },
       { path: "accounts", element: <AccountsListPage /> },
       { path: "accounts/:id", element: <AccountDetailPage /> },
+      { path: "accounts/new", element: <AccountFormPage /> },
+      { path: "accounts/:id/edit", element: <AccountFormPage />},
       { path: "login", element: <LoginPlaceholder /> },
     ],
   },
