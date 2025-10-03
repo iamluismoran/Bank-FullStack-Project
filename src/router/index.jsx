@@ -1,5 +1,6 @@
-import { createBrowserRouter, Navigate } from "react-router-dom";
+import { createBrowserRouter } from "react-router-dom";
 import App from "../App";
+import HomePage from "../pages/HomePage";
 import AccountsListPage from "../pages/AccountsListPage";
 import AccountDetailPage from "../pages/AccountDetailPage";
 import AccountFormPage from "../pages/AccountFormPage";
@@ -12,7 +13,10 @@ const router = createBrowserRouter([
     path: "/",
     element: <App />,
     children: [
-      { index: true, element: <Navigate to="/accounts" replace /> },
+      // Home como página principal
+      { index: true, element: <HomePage /> },
+
+      // Cuentas
       { path: "accounts", element: <AccountsListPage /> },
       { path: "accounts/:id", element: <AccountDetailPage /> },
       { path: "accounts/new", element: (
@@ -25,6 +29,8 @@ const router = createBrowserRouter([
             <AccountFormPage />
           </ProtectedRoute>
         ) },
+
+      // Auth
       { path: "login", element: <LoginPage /> },
       { path: "register", element: <RegisterPage /> },
     ],

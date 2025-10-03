@@ -1,4 +1,3 @@
-// src/components/layout/Header.jsx
 import { NavLink, useNavigate } from "react-router-dom";
 import useHealth from "../../hooks/useHealth";
 import { useAuth } from "../../context/AuthContext";
@@ -35,7 +34,7 @@ export default function Header() {
     <header className="header">
       <div className="container">
         <div className="card header__bar">
-          <div className="brand">Banco Demo</div>
+          <NavLink to="/" className="brand">Banco</NavLink>
 
           <nav className="nav">
             <NavLink to="/accounts">Cuentas</NavLink>

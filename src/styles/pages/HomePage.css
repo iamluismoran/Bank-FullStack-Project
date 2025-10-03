@@ -1,0 +1,51 @@
+/* Hero */
+.hero {
+  text-align: center;
+  padding: 32px 20px;
+  background: linear-gradient(180deg, #0f1530 0%, #0b0f24 100%);
+  border: 1px solid #1d2a63;
+}
+
+.hero__title {
+  margin: 0 0 8px 0;
+  font-size: 2rem;
+  letter-spacing: .5px;
+}
+
+.hero__subtitle {
+  margin: 0 auto 16px auto;
+  max-width: 720px;
+  color: var(--muted);
+}
+
+.hero__actions {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+/* Features grid */
+.grid-features {
+  display: grid;
+  gap: 16px;
+  margin-top: 16px;
+}
+
+@media (min-width: 760px) {
+  .grid-features {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.feature__title { margin-top: 0; }
+.feature__text { margin-bottom: 0; color: var(--muted); }
+
+/* Botón variante "ghost" */
+button.ghost {
+  background: transparent;
+  border-color: #24305f;
+}
+button.ghost:hover {
+  border-color: #3c4aa0;
+}
