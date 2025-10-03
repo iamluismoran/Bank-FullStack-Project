@@ -46,6 +46,7 @@ export default function Header() {
               </>
             ) : (
               <>
+                <NavLink to="/dashboard">Perfil</NavLink>
                 <span className="badge">{user.email}</span>
                 <button type="button" onClick={handleLogout}>Logout</button>
               </>

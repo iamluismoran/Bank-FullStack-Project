@@ -8,7 +8,6 @@ export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  // Carga inicial + escucha cambios
   useEffect(() => {
     let mounted = true;
 
@@ -34,14 +33,28 @@ export function AuthProvider({ children }) {
     session,
     user,
     loading,
+
     async signIn({ email, password }) {
       return supabase.auth.signInWithPassword({ email, password });
     },
-    async signUp({ email, password }) {
-      return supabase.auth.signUp({ email, password });
+
+    // signUp admite options para pasar user_metadata
+    async signUp({ email, password, options }) {
+      return supabase.auth.signUp({ email, password, options });
     },
+
     async signOut() {
       return supabase.auth.signOut();
+    },
+
+    // actualizar user_metadata
+    async updateUserMetadata(data) {
+      const { data: res, error } = await supabase.auth.updateUser({ data });
+      if (!error && res?.user) {
+        // refresca el usuario en memoria para que el cambio se refleje ya
+        setUser(res.user);
+      }
+      return { data: res, error };
     },
   };
 

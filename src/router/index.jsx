@@ -6,6 +6,8 @@ import AccountDetailPage from "../pages/AccountDetailPage";
 import AccountFormPage from "../pages/AccountFormPage";
 import LoginPage from "../pages/LoginPage";
 import RegisterPage from "../pages/RegisterPage";
+import DashboardPage from "../pages/DashboardPage";
+import ProfilePage from "../pages/ProfilePage";
 import ProtectedRoute from "./ProtectedRoute";
 
 const router = createBrowserRouter([
@@ -13,24 +15,27 @@ const router = createBrowserRouter([
     path: "/",
     element: <App />,
     children: [
-      // Home como página principal
       { index: true, element: <HomePage /> },
 
-      // Cuentas
+      // Perfil real (dashboard)
+      { path: "dashboard", element: (
+          <ProtectedRoute><DashboardPage /></ProtectedRoute>
+        ) },
+
       { path: "accounts", element: <AccountsListPage /> },
       { path: "accounts/:id", element: <AccountDetailPage /> },
       { path: "accounts/new", element: (
-          <ProtectedRoute>
-            <AccountFormPage />
-          </ProtectedRoute>
+          <ProtectedRoute><AccountFormPage /></ProtectedRoute>
         ) },
       { path: "accounts/:id/edit", element: (
-          <ProtectedRoute>
-            <AccountFormPage />
-          </ProtectedRoute>
+          <ProtectedRoute><AccountFormPage /></ProtectedRoute>
         ) },
 
-      // Auth
+      // Página de ajustes dev (opcional)
+      { path: "profile", element: (
+          <ProtectedRoute><ProfilePage /></ProtectedRoute>
+        ) },
+
       { path: "login", element: <LoginPage /> },
       { path: "register", element: <RegisterPage /> },
     ],

@@ -7,6 +7,7 @@ import "../styles/pages/AuthPage.css";
 export default function RegisterPage() {
   const { signUp } = useAuth();
   const [email, setEmail] = useState("");
+  const [ownerId, setOwnerId] = useState("");
   const [password, setPassword] = useState("");
   const [confirm, setConfirm] = useState("");
   const [busy, setBusy] = useState(false);
@@ -14,26 +15,38 @@ export default function RegisterPage() {
   const [error, setError] = useState("");
   const navigate = useNavigate();
 
+  const isPositiveInt = (v) => /^-?\d+$/.test(String(v).trim()) && Number(v) > 0;
+
   async function onSubmit(e) {
     e.preventDefault();
     setError("");
     setMsg("");
+
     if (password !== confirm) {
       setError("Passwords do not match");
       return;
     }
+    if (!isPositiveInt(ownerId)) {
+      setError("Owner ID must be a positive integer (e.g., 1 for Felipe).");
+      return;
+    }
+
     setBusy(true);
-    const { data, error } = await signUp({ email, password });
+    const { data, error } = await signUp({
+      email,
+      password,
+      // Guarda el ownerId en user_metadata de Supabase
+      options: { data: { ownerId: Number(ownerId) } },
+    });
     setBusy(false);
+
     if (error) {
       setError(error.message || "Could not register");
       return;
     }
-    if (data?.session) {
-      navigate("/accounts", { replace: true });
-    } else {
-      setMsg("Check your email to confirm your account, then log in.");
-    }
+    // Como la confirmación de email está desactivada, habrá sesión directa
+    if (data?.session) navigate("/accounts", { replace: true });
+    else setMsg("Check your email to confirm your account, then log in.");
   }
 
   return (
@@ -46,6 +59,9 @@ export default function RegisterPage() {
         <form onSubmit={onSubmit}>
           <label htmlFor="email">Email</label>
           <input id="email" type="email" autoComplete="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
+
+          <label htmlFor="ownerId">Owner ID (e.g., 1 = Felipe)</label>
+          <input id="ownerId" type="number" min="1" step="1" value={ownerId} onChange={(e) => setOwnerId(e.target.value)} required />
 
           <label htmlFor="password">Password</label>
           <input id="password" type="password" autoComplete="new-password" value={password} onChange={(e) => setPassword(e.target.value)} required />

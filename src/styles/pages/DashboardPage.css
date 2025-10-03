@@ -1,0 +1,33 @@
+.dashboard-hero {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.hero-actions { display: flex; gap: 8px; }
+
+.section-title { margin-top: 0; }
+
+.kv { display: grid; gap: 8px; margin-bottom: 12px; }
+.kv .k { color: var(--muted); margin-right: 8px; }
+.kv > div { display: flex; justify-content: space-between; }
+
+.balance-card {
+  margin: 12px 0 16px;
+  padding: 16px;
+  border-radius: 16px;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.06);
+}
+.balance-label { color: var(--muted); }
+.balance-amount {
+  font-size: 28px;
+  font-weight: 700;
+  line-height: 1.2;
+}
+.balance-sub { color: var(--muted); margin-top: 4px; }
+
+.grid-2 { display: grid; gap: 16px; }
+@media (min-width: 860px) {
+  .grid-2 { grid-template-columns: 1fr 1fr; }
+}
