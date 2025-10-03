@@ -1,0 +1,26 @@
+/* Header layout */
+.header { padding-top: 16px; }
+
+.header__bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* Navegación del header */
+.nav {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+/* Botón “Probar conexión”*/
+.health-btn {
+  background: transparent;
+  padding: 0;
+}
+
+/* marca */
+.brand {
+  font-weight: 700;
+}

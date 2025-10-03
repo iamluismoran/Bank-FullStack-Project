@@ -1,68 +1,41 @@
-:root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
+@import "./tokens.css";
 
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
-
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+*{box-sizing:border-box}
+html,body,#root{height:100%}
+body{
+  margin:0;background:var(--bg);color:var(--text);
+  font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,"Helvetica Neue",Arial
 }
+a{color:var(--primary);text-decoration:none}
+a.active{font-weight:600}
 
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
-}
-a:hover {
-  color: #535bf2;
-}
+:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+@media (prefers-reduced-motion: reduce){*{transition:none!important;animation:none!important}}
 
-body {
-  margin: 0;
-  display: flex;
-  place-items: center;
-  min-width: 320px;
-  min-height: 100vh;
+button{
+  cursor:pointer;border:0;border-radius:var(--radius);
+  padding:10px 14px;background:var(--primary);color:#fff;
+  transition:transform .15s ease, background .2s ease
+}
+button:disabled{opacity:.6;cursor:not-allowed}
+button:active{transform:scale(.98)}
+
+input{
+  width:100%;padding:10px 12px;border-radius:10px;
+  border:1px solid #2a335a;background:#0f1530;color:var(--text)
 }
 
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
+.container{max-width:var(--container);margin:0 auto;padding:16px}
+.card{
+  background:var(--surface);border:1px solid #1c244a;border-radius:var(--radius);padding:16px
 }
+.row{display:flex;gap:var(--gap);flex-wrap:wrap;align-items:center}
+.spacer{flex:1}
 
-button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: #1a1a1a;
-  cursor: pointer;
-  transition: border-color 0.25s;
+.badge{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:6px 10px;border-radius:999px;font-size:.9rem;
+  border:1px solid #22306b;background:#0f1530
 }
-button:hover {
-  border-color: #646cff;
-}
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
-}
-
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
-  a:hover {
-    color: #747bff;
-  }
-  button {
-    background-color: #f9f9f9;
-  }
-}
+.badge.ok{border-color:#224b2c;color:var(--success)}
+.badge.err{border-color:#5e1f2a;color:#ff9aa2}
