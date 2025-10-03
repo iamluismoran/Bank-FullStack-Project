@@ -3,7 +3,9 @@
 *{box-sizing:border-box}
 html,body,#root{height:100%}
 body{
-  margin:0;background:var(--bg);color:var(--text);
+  margin:0;
+  background: #828282;
+  color:var(--text);
   font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,"Helvetica Neue",Arial
 }
 a{color:var(--primary);text-decoration:none}

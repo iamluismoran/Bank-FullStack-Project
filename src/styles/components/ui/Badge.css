@@ -1,0 +1,8 @@
+.badge.tag {
+  border-color: #243b91;
+  background: #0f1530;
+}
+
+/* variantes opcionales para personalizar tags */
+.badge.tag.success { border-color: #224b2c; color: var(--success); }
+.badge.tag.warn { border-color: #594316; color: #ffd166; }
