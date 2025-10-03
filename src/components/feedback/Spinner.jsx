@@ -1,6 +1,8 @@
+import "../../styles/components/feedback/Spinner.css";
+
 export default function Spinner({ label = "Cargando..." }) {
   return (
-    <div className="card" role="status" aria-live="polite">
+    <div className="card spinner" role="status" aria-live="polite">
       {label}
     </div>
   );

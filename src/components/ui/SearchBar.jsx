@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import "../../styles/components/ui/SearchBar.css";
 
 export default function SearchBar({ value, onChange, delay = 400, placeholder = "Buscar por nombre o ID..." }) {
   const [local, setLocal] = useState(value || "");
@@ -14,6 +15,7 @@ export default function SearchBar({ value, onChange, delay = 400, placeholder = 
 
   return (
     <input
+      className="search-input"
       aria-label="Buscar"
       value={local}
       onChange={(e) => setLocal(e.target.value)}

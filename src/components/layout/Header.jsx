@@ -1,6 +1,6 @@
 import { NavLink } from "react-router-dom";
 import useHealth from "../../hooks/useHealth";
-import "../../styles/layout/header.css"; // ← importa el CSS de esta sección
+import "../../styles/components/layout/Header.css";
 
 function HealthBadge() {
   const { data, isLoading, isError, refetch, isFetching } = useHealth();
