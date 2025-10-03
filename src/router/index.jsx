@@ -3,17 +3,9 @@ import App from "../App";
 import AccountsListPage from "../pages/AccountsListPage";
 import AccountDetailPage from "../pages/AccountDetailPage";
 import AccountFormPage from "../pages/AccountFormPage";
-
-function LoginPlaceholder() {
-  return (
-    <div className="container">
-      <div className="card">
-        <h1 style={{ marginTop: 0 }}>Login</h1>
-        <p>Aun falta la autenticación</p>
-      </div>
-    </div>
-  );
-}
+import LoginPage from "../pages/LoginPage";
+import RegisterPage from "../pages/RegisterPage";
+import ProtectedRoute from "./ProtectedRoute";
 
 const router = createBrowserRouter([
   {
@@ -23,9 +15,18 @@ const router = createBrowserRouter([
       { index: true, element: <Navigate to="/accounts" replace /> },
       { path: "accounts", element: <AccountsListPage /> },
       { path: "accounts/:id", element: <AccountDetailPage /> },
-      { path: "accounts/new", element: <AccountFormPage /> },
-      { path: "accounts/:id/edit", element: <AccountFormPage />},
-      { path: "login", element: <LoginPlaceholder /> },
+      { path: "accounts/new", element: (
+          <ProtectedRoute>
+            <AccountFormPage />
+          </ProtectedRoute>
+        ) },
+      { path: "accounts/:id/edit", element: (
+          <ProtectedRoute>
+            <AccountFormPage />
+          </ProtectedRoute>
+        ) },
+      { path: "login", element: <LoginPage /> },
+      { path: "register", element: <RegisterPage /> },
     ],
   },
 ]);

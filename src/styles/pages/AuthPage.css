@@ -1,0 +1,4 @@
+.auth-card { max-width: 420px; margin: 0 auto; }
+.auth-card form { display: grid; gap: 10px; }
+.auth-card .title { margin-top: 0; }
+.hint { color: var(--muted); margin-top: 8px; }
