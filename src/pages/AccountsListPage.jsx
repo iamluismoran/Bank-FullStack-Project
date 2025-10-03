@@ -1,9 +1,8 @@
 import { Link, useSearchParams } from "react-router-dom";
 import { useEffect, useMemo, useState } from "react";
 import { useAccountsList } from "../hooks/useAccounts.js";
-import { useDemoProfile } from "../context/ProfileContext"; 
+import { useDemoProfile } from "../context/ProfileContext";
 import Pagination from "../components/ui/Pagination.jsx";
-import SearchBar from "../components/ui/SearchBar.jsx";
 import Spinner from "../components/feedback/Spinner.jsx";
 import Alert from "../components/feedback/Alert.jsx";
 import EmptyState from "../components/feedback/EmptyState.jsx";
@@ -15,32 +14,27 @@ export default function AccountsListPage() {
   const [sp, setSp] = useSearchParams();
   const [page, setPage] = useState(Number(sp.get("page") || 1));
   const [pageSize] = useState(10);
-  const [search, setSearch] = useState(sp.get("search") || "");
 
-  // Perfil: ownerId y toggle "solo mis cuentas"
-  const { ownerId, showMineOnly, setShowMineOnly } = useDemoProfile();
+  // Perfil: tomamos ownerId (no mostramos toggle ni nada)
+  const { ownerId } = useDemoProfile();
 
-  // Sincronizar URL con estado local
+  // Sincronizar solo la página en la URL
   useEffect(() => {
     const next = new URLSearchParams(sp);
     next.set("page", String(page));
-    if (search) next.set("search", search);
-    else next.delete("search");
     setSp(next, { replace: true });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [page, search]);
+  }, [page]);
 
-  // Cargar lista desde backend (sin filtro de owner en el server)
-  const { data, isLoading, isError, error } = useAccountsList(search, page, pageSize);
+  // Cargar lista desde backend (sin búsqueda, sin crear)
+  const { data, isLoading, isError, error } = useAccountsList("", page, pageSize);
 
-  // Filtrado en cliente por ownerId cuando el toggle está activo
+  // 🔒 Filtramos SIEMPRE por ownerId
   const visibleItems = useMemo(() => {
     const items = data?.items || [];
-    if (showMineOnly && ownerId) {
-      return items.filter((it) => it.primaryOwnerId === ownerId);
-    }
-    return items;
-  }, [data, showMineOnly, ownerId]);
+    if (!ownerId) return []; // si no hay ownerId, no mostramos nada
+    return items.filter((it) => it.primaryOwnerId === ownerId);
+  }, [data, ownerId]);
 
   return (
     <div className="container">
@@ -48,27 +42,12 @@ export default function AccountsListPage() {
         <div className="header-row" style={{ gap: 12 }}>
           <h1 className="title" style={{ margin: 0 }}>Cuentas</h1>
 
-          <div className="actions" style={{ display: "flex", gap: 12, marginLeft: "auto" }}>
-            <div className="accounts-search">
-              <SearchBar value={search} onChange={(v) => { setPage(1); setSearch(v); }} />
-            </div>
-
-            {/* Toggle solo visible si conocemos el ownerId */}
-            {ownerId && (
-              <label className="checkbox" title={`Owner ID: ${ownerId}`}>
-                <input
-                  type="checkbox"
-                  checked={showMineOnly}
-                  onChange={(e) => setShowMineOnly(e.target.checked)}
-                />
-                <span>Mis cuentas (Owner {ownerId})</span>
-              </label>
-            )}
-
-            <Link to="/accounts/new">
-              <button>Crear cuenta</button>
-            </Link>
-          </div>
+          {/* Etiqueta informativa. Sin buscador. Sin crear cuenta. */}
+          {ownerId && (
+            <span className="badge" title={`Owner ID: ${ownerId}`} style={{ marginLeft: "auto" }}>
+              Mis cuentas (Owner {ownerId})
+            </span>
+          )}
         </div>
       </div>
 
@@ -76,16 +55,20 @@ export default function AccountsListPage() {
 
       {isError && <Alert>Error: {error?.message || "No se pudo cargar el listado"}</Alert>}
 
-      {data && visibleItems.length === 0 && (
-        <EmptyState>
-          Sin resultados {ownerId && showMineOnly ? "(filtrando por tus cuentas)" : ""}.
-        </EmptyState>
+      {!ownerId && !isLoading && (
+        <Alert>
+          No hay Owner asignado a tu usuario. Inicia sesión con un usuario válido.
+        </Alert>
       )}
 
-      {data && visibleItems.length > 0 && (
+      {ownerId && data && visibleItems.length === 0 && (
+        <EmptyState>Sin resultados.</EmptyState>
+      )}
+
+      {ownerId && data && visibleItems.length > 0 && (
         <div className="card">
           <div className="table-wrap">
-            <table className="table" role="table" aria-label="Listado de cuentas">
+            <table className="table" role="table" aria-label="Listado de mis cuentas">
               <thead>
                 <tr>
                   <th>ID</th>
@@ -111,7 +94,6 @@ export default function AccountsListPage() {
             </table>
           </div>
 
-          {/* La paginación usa el total del server: OK para demo */}
           <div className="accounts-pagination">
             <Pagination
               page={page}
