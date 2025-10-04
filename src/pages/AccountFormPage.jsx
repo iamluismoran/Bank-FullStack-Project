@@ -85,7 +85,7 @@ export default function AccountFormPage() {
       if (newId) navigate(`/accounts/${newId}`);
       else navigate(`/accounts`);
     } catch (err) {
-      // El error se muestra abajo con <Alert />
+      // El error se muestra con <Alert />
     }
   }
 
@@ -243,11 +243,9 @@ export default function AccountFormPage() {
     </div>
   );
 }
-
 /**
  * buildPayload — convierte strings a números y asegura secondaryOwnerId.
- * Si secondaryOwnerId está vacío, usamos el mismo primaryOwnerId (tu backend
- * a veces requiere NOT NULL para el secundario).
+ * Si secondaryOwnerId está vacío, usamos el mismo primaryOwnerId.
  */
 function buildPayload(type, f) {
   const num = (v) =>

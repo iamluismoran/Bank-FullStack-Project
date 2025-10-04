@@ -1,5 +1,7 @@
 /* Página: Listado de Cuentas */
-.accounts-header { margin-bottom: 16px; }
+.accounts-header {
+  margin-top: 30px;
+  margin-bottom: 15px; }
 
 /* fila superior del header del listado */
 .header-row {
@@ -10,20 +12,13 @@
   flex-wrap: wrap;
 }
 
-.title { margin: 0; }
+.table-wrap {
+  overflow-x: auto; }
 
-.accounts-search {
-  width: 320px;
-  max-width: 100%;
-}
-
-/* contenedor del buscador + botón crear */
-.actions {
-  display: flex;
+/* Centrar los controles de paginación */
+.accounts-pagination{
+  margin-top: 12px;
+  display: flex; 
+  justify-content: center;
   align-items: center;
-  gap: 12px;
 }
-
-.table-wrap { overflow-x: auto; }
-
-.accounts-pagination { margin-top: 12px; }

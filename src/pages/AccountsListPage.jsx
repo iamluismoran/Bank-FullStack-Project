@@ -15,7 +15,7 @@ export default function AccountsListPage() {
   const [page, setPage] = useState(Number(sp.get("page") || 1));
   const [pageSize] = useState(10);
 
-  // Perfil: tomamos ownerId (no mostramos toggle ni nada)
+  // Perfil: tomamos ownerId
   const { ownerId } = useDemoProfile();
 
   // Sincronizar solo la página en la URL
@@ -26,10 +26,10 @@ export default function AccountsListPage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page]);
 
-  // Cargar lista desde backend (sin búsqueda, sin crear)
+  // Cargar lista desde backend
   const { data, isLoading, isError, error } = useAccountsList("", page, pageSize);
 
-  // 🔒 Filtramos SIEMPRE por ownerId
+  // Filtramos SIEMPRE por ownerId
   const visibleItems = useMemo(() => {
     const items = data?.items || [];
     if (!ownerId) return []; // si no hay ownerId, no mostramos nada
@@ -42,7 +42,6 @@ export default function AccountsListPage() {
         <div className="header-row" style={{ gap: 12 }}>
           <h1 className="title" style={{ margin: 0 }}>Cuentas</h1>
 
-          {/* Etiqueta informativa. Sin buscador. Sin crear cuenta. */}
           {ownerId && (
             <span className="badge" title={`Owner ID: ${ownerId}`} style={{ marginLeft: "auto" }}>
               Mis cuentas (Owner {ownerId})

@@ -30,40 +30,52 @@ a.active{
   font-weight:600
 }
 
-:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+:focus-visible{
+  outline:3px solid var(--focus);
+  outline-offset:2px
+}
 @media (prefers-reduced-motion: reduce){*{transition:none!important;animation:none!important}}
 
 button{
-  cursor:pointer;border:0;border-radius:var(--radius);
-  padding:10px 14px;background:var(--primary);color:#fff;
-  transition: 1s;
+  cursor:pointer;
+  border:0;
+  border-radius:150px;
+  padding:10px 14px;
+  background:var(--text);
+  color:#fff;
 }
-button:disabled{opacity:.6;cursor:not-allowed}
-button:active{transform:scale(.98)}
 
 input{
-  width:100%;padding:10px 12px;border-radius:10px;
-  border:1px solid #2a335a;
+  width:100%;
+  padding:10px 12px;
+  border-radius:10px;
+  border:1px solid #7f90da;
   background: var(--surface);
-  color: var(--text);
+  color: var(--primary-orange);
 }
 
-.container{max-width:var(--container);margin:0 auto;padding:16px}
+.container{
+  max-width:var(--container);
+  margin:0 auto;
+  padding:16px}
 
 .card{
   background:var(--surface);
-  border:1px solid #1c244a;
-  border-radius:var(--radius);
+  border:1px solid var(--primary);
+  border-radius:15px;
   padding:16px;
 }
 
-.row{display:flex;gap:var(--gap);flex-wrap:wrap;align-items:center}
-.spacer{flex:1}
+
 
 .badge{
-  display:inline-flex;align-items:center;gap:8px;
-  padding:6px 10px;border-radius:999px;font-size:.9rem;
-  border:1px solid #22306b;background:#0f1530
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  padding:6px 10px;
+  border-radius:999px;
+  font-size:.9rem;
+  background:#d5d5d5;
 }
 .badge.ok{border-color:#224b2c;color:var(--success)}
-.badge.err{border-color:#5e1f2a;color:#ff9aa2}
+.badge.err{border-color:#5e1f2a;color:#ae4850}

@@ -1,129 +1,170 @@
-import { useParams, Link } from "react-router-dom";
-import { useAccountDetail, useAccountBalance } from "../hooks/useAccounts";
+import { useEffect, useState } from "react";
+import { Link, useParams } from "react-router-dom";
+import { getAccount, getAccountBalance } from "../api/accounts";
 import Spinner from "../components/feedback/Spinner";
 import Alert from "../components/feedback/Alert";
-import Badge from "../components/ui/Badge";
-
 import "../styles/pages/AccountDetailPage.css";
 
 export default function AccountDetailPage() {
   const { id } = useParams();
 
-  const detailQ = useAccountDetail(id);
-  const balanceQ = useAccountBalance(id);
+  // Detalle
+  const [account, setAccount] = useState(null);
+  const [loadingAcc, setLoadingAcc] = useState(true);
+  const [accError, setAccError] = useState("");
 
-  if (detailQ.isLoading) return <div className="container"><Spinner label="Cargando detalle..." /></div>;
-  if (detailQ.isError) return <div className="container"><Alert>Error: {detailQ.error?.message || "No se pudo cargar el detalle"}</Alert></div>;
+  // Saldo
+  const [balance, setBalance] = useState(null);
+  const [loadingBal, setLoadingBal] = useState(false);
+  const [balError, setBalError] = useState("");
 
-  const data = detailQ.data;
+  // Cargar detalle
+  useEffect(() => {
+    let cancel = false;
+    async function loadDetail() {
+      setAccError("");
+      setLoadingAcc(true);
+      try {
+        const data = await getAccount(id);
+        if (!cancel) setAccount(data);
+      } catch (e) {
+        if (!cancel) setAccError(e?.message || "No se pudo cargar la cuenta");
+      } finally {
+        if (!cancel) setLoadingAcc(false);
+      }
+    }
+    loadDetail();
+    return () => { cancel = true; };
+  }, [id]);
 
-  const tags = Array.isArray(data?.tags) ? data.tags : [data?.type, data?.status].filter(Boolean);
+  // Cargar saldo
+  useEffect(() => {
+    refreshBalance();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [id]);
+
+  async function refreshBalance() {
+    setBalError("");
+    setLoadingBal(true);
+    try {
+      const data = await getAccountBalance(id);
+      setBalance(typeof data === "number" ? data : (data?.balance ?? 0));
+    } catch (e) {
+      setBalError(e?.message || "No se pudo obtener el saldo");
+    } finally {
+      setLoadingBal(false);
+    }
+  }
+
+  if (loadingAcc) {
+    return (
+      <div className="container account-detail">
+        <Spinner label="Cargando cuenta..." />
+      </div>
+    );
+  }
+  if (accError) {
+    return (
+      <div className="container account-detail">
+        <Alert>{accError}</Alert>
+      </div>
+    );
+  }
+  if (!account) return null;
+
+  const {
+    type, status, creationDate,
+    primaryOwnerName, primaryOwnerId,
+    hasSecondaryOwner, secondaryOwnerId
+  } = account;
+
+  const formattedBalance =
+    Number(balance ?? 0).toLocaleString(undefined, {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    });
 
   return (
-    <div className="container">
-      {}
+    <div className="container account-detail">
+      {/* Header */}
       <div className="card detail-header">
-        <div className="detail-title">
-          <h1 className="title">Cuenta #{data.id}</h1>
-          <div className="tags">
-            {tags.map((t, i) => (
-              <Badge key={i}>{t}</Badge>
-            ))}
-          </div>
+        <div>
+          <h1 className="title">Cuenta Nº{account.id}</h1>
+          <p>
+            <strong>Titular:</strong> {primaryOwnerName} ({primaryOwnerId})<br />
+            <strong>Secundario:</strong> {hasSecondaryOwner ? secondaryOwnerId : "—"}
+          </p>
+          <p><Link to="/accounts">← Volver al listado</Link></p>
         </div>
-        <div className="row detail-sub">
-          <div><strong>Titular:</strong> {data.primaryOwnerName} (ID {data.primaryOwnerId})</div>
-          {data.hasSecondaryOwner && <div><strong>Secundario:</strong> {data.secondaryOwnerId}</div>}
-          <div className="spacer" />
-          <Link to="/accounts">← Volver al listado</Link>
+        <div className="detail-tags">
+          <span className="badge">{type}</span>
+          <span className="badge">{status}</span>
         </div>
       </div>
 
-      {}
-      <div className="card balance-card" aria-live="polite" aria-busy={balanceQ.isFetching}>
+      {/* Saldo actual */}
+      <div className="card">
         <div className="balance-row">
-          <div>
-            <div className="balance-label">Saldo actual</div>
-            <div className="balance-display">
-              {balanceQ.isLoading ? "Cargando..." :
-               balanceQ.isError ? "—" :
-               (typeof balanceQ.data?.balance === "number"
-                  ? balanceQ.data.balance.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })
-                  : balanceQ.data?.balance ?? "—")}
-            </div>
-          </div>
-          <div className="row gap-8">
-            <button onClick={() => balanceQ.refetch()} disabled={balanceQ.isFetching}>Actualizar saldo</button>
-          </div>
+          <h2 className="section-title">Saldo actual</h2>
+          <button type="button" onClick={refreshBalance} disabled={loadingBal}>
+            {loadingBal ? "Actualizando..." : "Actualizar saldo"}
+          </button>
         </div>
-        {balanceQ.isError && <div className="balance-error">No se pudo cargar el saldo.</div>}
-      </div>
 
-      {}
-      <div className="detail-grid">
+        {balError ? (
+          <Alert>{balError}</Alert>
+        ) : (
+          <div className="balance-amount lg">
+            {loadingBal ? "—" : formattedBalance}
+          </div>
+        )}
+      </div>
+      <div className="two-col">
         <div className="card">
           <h2 className="section-title">Información</h2>
-          <dl className="meta">
-            <div><dt>Tipo</dt><dd>{data.type}</dd></div>
-            <div><dt>Estado</dt><dd>{data.status}</dd></div>
-            <div><dt>Creación</dt><dd>{data.creationDate}</dd></div>
-          </dl>
+          <div className="kv">
+            <div><span className="k">Tipo</span><span className="v">{type}</span></div>
+            <div><span className="k">Estado</span><span className="v">{status}</span></div>
+            <div><span className="k">Creación</span><span className="v">{creationDate}</span></div>
+          </div>
         </div>
 
-        {}
-        {data.checking && (
+        {account.checking && (
           <div className="card">
             <h2 className="section-title">Checking</h2>
-            <dl className="meta">
-              <div><dt>Saldo mínimo</dt><dd>{fmtMoney(data.checking.minimumBalance)}</dd></div>
-              <div><dt>Cuota mensual</dt><dd>{fmtMoney(data.checking.monthlyMaintenanceFee)}</dd></div>
-              <div><dt>Últ. comisión</dt><dd>{data.checking.lastMonthlyFeeDate || "—"}</dd></div>
-            </dl>
+            <div className="kv">
+              <div><span className="k">Saldo mínimo</span><span className="v">{Number(account.checking.minimumBalance).toLocaleString()}</span></div>
+              <div><span className="k">Cuota mensual</span><span className="v">{Number(account.checking.monthlyMaintenanceFee).toLocaleString()}</span></div>
+              <div><span className="k">Últ. comisión</span><span className="v">—</span></div>
+            </div>
           </div>
         )}
 
-        {data.savings && (
+        {account.savings && (
           <div className="card">
             <h2 className="section-title">Savings</h2>
-            <dl className="meta">
-              <div><dt>Saldo mínimo</dt><dd>{fmtMoney(data.savings.minimumBalance)}</dd></div>
-              <div><dt>Interés anual</dt><dd>{fmtRate(data.savings.interestRate)}</dd></div>
-              <div><dt>Últ. interés</dt><dd>{data.savings.lastInterestDate || "—"}</dd></div>
-            </dl>
+            <div className="kv">
+              <div><span className="k">Interés anual</span><span className="v">
+                {Number(account.savings.interestRate).toLocaleString(undefined, { style: "percent", minimumFractionDigits: 2 })}
+              </span></div>
+              <div><span className="k">Mínimo</span><span className="v">{Number(account.savings.minimumBalance).toLocaleString()}</span></div>
+            </div>
           </div>
         )}
 
-        {data.creditCard && (
+        {account.creditCard && (
           <div className="card">
             <h2 className="section-title">Credit Card</h2>
-            <dl className="meta">
-              <div><dt>Límite</dt><dd>{fmtMoney(data.creditCard.creditLimit)}</dd></div>
-              <div><dt>Interés anual</dt><dd>{fmtRate(data.creditCard.interestRate)}</dd></div>
-              <div><dt>Últ. interés</dt><dd>{data.creditCard.lastInterestDate || "—"}</dd></div>
-            </dl>
-          </div>
-        )}
-
-        {data.studentChecking && (
-          <div className="card">
-            <h2 className="section-title">Student Checking</h2>
-            <p>Sin propiedades adicionales.</p>
+            <div className="kv">
+              <div><span className="k">Límite</span><span className="v">{Number(account.creditCard.creditLimit).toLocaleString()}</span></div>
+              <div><span className="k">Interés anual</span><span className="v">
+                {Number(account.creditCard.interestRate).toLocaleString(undefined, { style: "percent", minimumFractionDigits: 2 })}
+              </span></div>
+              <div><span className="k">Últ. interés</span><span className="v">—</span></div>
+            </div>
           </div>
         )}
       </div>
     </div>
   );
-}
-
-function fmtMoney(n) {
-  if (typeof n === "number") {
-    return n.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-  }
-  return n ?? "—";
-}
-function fmtRate(n) {
-  if (typeof n === "number") {
-    return `${(n * 100).toFixed(2)}%`;
-  }
-  return n ?? "—";
 }

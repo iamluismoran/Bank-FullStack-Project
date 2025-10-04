@@ -7,7 +7,7 @@ import "../styles/pages/AuthPage.css";
 export default function LoginPage() {
   const { signIn } = useAuth();
   const [sp] = useSearchParams();
-  const redirect = sp.get("redirect") || "/accounts";
+  const redirect = sp.get("redirect") || "/dashboard";
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");

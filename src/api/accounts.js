@@ -1,5 +1,3 @@
-// src/api/accounts.js
-
 /**
  * Listado de cuentas con búsqueda y paginación
  * GET /api/accounts?search=&page=&pageSize=
@@ -30,7 +28,6 @@ export async function getAccount(id) {
 }
 
 /**
- * Saldo en vivo (aplica reglas en backend)
  * GET /api/accounts/:id/balance
  */
 export async function getAccountBalance(id) {
@@ -38,7 +35,12 @@ export async function getAccountBalance(id) {
     headers: { Accept: "application/json" },
   });
   if (!res.ok) throw new Error(`Error loading balance for ${id}: ${res.status}`);
-  return res.json(); // { accountId, balance }
+
+  // El backend puede devolver { accountId, balance } o un número plano.
+  const data = await res.json();
+  if (typeof data === "number") return data;
+  if (typeof data === "string") return Number(data);
+  return Number(data?.balance ?? data?.amount ?? 0);
 }
 
 /* ===========================

@@ -1,33 +1,68 @@
-.dashboard-hero {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+.dashboard-hero{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  margin-bottom:16px;
 }
 
-.hero-actions { display: flex; gap: 8px; }
-
-.section-title { margin-top: 0; }
-
-.kv { display: grid; gap: 8px; margin-bottom: 12px; }
-.kv .k { color: var(--muted); margin-right: 8px; }
-.kv > div { display: flex; justify-content: space-between; }
-
-.balance-card {
-  margin: 12px 0 16px;
-  padding: 16px;
-  border-radius: 16px;
-  background: rgba(255,255,255,0.03);
-  border: 1px solid rgba(255,255,255,0.06);
+.hero-actions{
+  display:flex;
+  gap:12px;
 }
-.balance-label { color: var(--muted); }
-.balance-amount {
-  font-size: 28px;
-  font-weight: 700;
-  line-height: 1.2;
-}
-.balance-sub { color: var(--muted); margin-top: 4px; }
 
-.grid-2 { display: grid; gap: 16px; }
-@media (min-width: 860px) {
-  .grid-2 { grid-template-columns: 1fr 1fr; }
+.section-title{ margin-top:10px; }
+
+/* Listados clave/valor */
+.kv{
+  display:grid;
+  gap:10px;
+  margin-bottom:25px;
+}
+.kv .k{ color:var(--muted); margin-right:8px; }
+.kv div{ display:flex; justify-content:space-between; }
+
+/* Bloque de balance */
+.balance-card{
+  margin:12px 0 16px;
+  padding:16px;
+  border-radius:10px;
+  background:rgba(69,69,69,.30);
+  border:1px solid rgba(255,255,255,.06);
+}
+.balance-label{
+  font-weight:600;
+  color:rgb(110,110,110);
+}
+.balance-amount{
+  font-size:28px;
+  font-weight:700;
+  line-height:1.2; }
+.balance-sub{
+  font-size:12px;
+  color:var(--primary); margin-top:6px; }
+
+/* === GRID de dos tarjetas === */
+.grid-2{
+  display:grid;
+  gap:24px;
+  align-items:start;
+  margin-top:8px;
+}
+
+/* Móvil: 1 columna */
+@media (max-width: 859px){
+  .grid-2{ grid-template-columns: 1fr; }
+}
+
+/* Escritorio: 2 columnas equilibradas */
+@media (min-width: 860px){
+  .grid-2{
+    grid-template-columns: minmax(0,1.25fr) minmax(0,1fr);
+    /* ¡ojo! antes tenías 12fr 1fr, eso pegaba todo */
+  }
+}
+
+/* Solo en el dashboard: redondeo propio de card (no afecta a header) */
+.dashboard .card{
+  border-radius:16px;
 }

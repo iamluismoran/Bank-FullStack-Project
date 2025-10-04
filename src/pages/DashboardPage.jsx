@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { useDemoProfile } from "../context/ProfileContext";
 import { useAccountsList } from "../hooks/useAccounts";
-import { getAccount } from "../api/accounts";
+import { getAccountBalance } from "../api/accounts";
 import Spinner from "../components/feedback/Spinner";
 import Alert from "../components/feedback/Alert";
 import "../styles/pages/DashboardPage.css";
@@ -13,41 +13,40 @@ export default function DashboardPage() {
   const { ownerId } = useDemoProfile();
   const navigate = useNavigate();
 
-  // Traemos muchas cuentas y filtramos por owner (cliente)
+  // Traemos varias cuentas y filtramos por owner
   const { data, isLoading, isError, error } = useAccountsList("", 1, 50);
 
-  // Mis cuentas (según owner)
   const myAccounts = useMemo(() => {
     const items = data?.items || [];
     return ownerId ? items.filter(a => a.primaryOwnerId === ownerId) : items;
   }, [data, ownerId]);
 
-  // Elegimos una "principal": prioriza CHECKING, si no, la primera
+  // Elegimos "principal": prioriza CHECKING
   const main = useMemo(() => {
     if (!myAccounts.length) return null;
     const checking = myAccounts.find(a => a.type === "CHECKING");
     return checking || myAccounts[0];
   }, [myAccounts]);
 
-  // Traemos detalle de la principal para mostrar balance “real”
-  const [mainDetail, setMainDetail] = useState(null);
-  const [loadingDetail, setLoadingDetail] = useState(false);
-  const [detailError, setDetailError] = useState("");
+  // Estado para el balance (en lugar de pedir el detalle completo)
+  const [balance, setBalance] = useState(null);
+  const [loadingBalance, setLoadingBalance] = useState(false);
+  const [balanceError, setBalanceError] = useState("");
 
   useEffect(() => {
     let cancel = false;
     async function load() {
-      setDetailError("");
-      setMainDetail(null);
+      setBalanceError("");
+      setBalance(null);
       if (!main) return;
-      setLoadingDetail(true);
+      setLoadingBalance(true);
       try {
-        const detail = await getAccount(main.id);
-        if (!cancel) setMainDetail(detail);
+        const b = await getAccountBalance(main.id);
+        if (!cancel) setBalance(b);
       } catch (e) {
-        if (!cancel) setDetailError(e?.message || "No se pudo cargar el detalle");
+        if (!cancel) setBalanceError(e?.message || "No se pudo cargar el balance");
       } finally {
-        if (!cancel) setLoadingDetail(false);
+        if (!cancel) setLoadingBalance(false);
       }
     }
     load();
@@ -55,11 +54,11 @@ export default function DashboardPage() {
   }, [main]);
 
   return (
-    <div className="container">
+    <div className="container dashboard">
       <div className="card dashboard-hero">
         <div>
-          <h1 className="title">Hola, Felipe Boyle</h1>
-          <p className="muted">Resumen de tus productos</p>
+          <h1 className="title">Bienvenido, Felipe Boyle</h1>
+          <p className="muted">Principales productos</p>
         </div>
         {!!main && (
           <div className="hero-actions">
@@ -69,35 +68,33 @@ export default function DashboardPage() {
         )}
       </div>
 
-      {/* Tarjeta de cuenta principal */}
       <div className="grid-2">
+        {/* Cuenta principal */}
         <div className="card">
           <h2 className="section-title">Cuenta principal</h2>
 
-          {!main && <Alert>No tienes cuentas asociadas.</Alert>}
+          {!main && <Alert>No tienes cuentas asociadas</Alert>}
           {main && (
             <>
               <div className="kv">
-                <div><span className="k">ID</span><span className="v">#{main.id}</span></div>
+                <div><span className="k">ID</span><span className="v">Nº {main.id}</span></div>
                 <div><span className="k">Tipo</span><span className="v">{main.type}</span></div>
                 <div><span className="k">Estado</span><span className="v">{main.status}</span></div>
                 <div><span className="k">Creación</span><span className="v">{main.creationDate}</span></div>
               </div>
 
-              {loadingDetail && <Spinner label="Cargando balance..." />}
-              {detailError && <Alert>{detailError}</Alert>}
-              {mainDetail && (
+              {loadingBalance && <Spinner label="Cargando balance..." />}
+              {balanceError && <Alert>{balanceError}</Alert>}
+              {balance != null && (
                 <div className="balance-card">
                   <div className="balance-label">Saldo actual</div>
                   <div className="balance-amount">
-                    {Number(mainDetail.balance ?? 0).toLocaleString(undefined, {
+                    {Number(balance).toLocaleString(undefined, {
                       minimumFractionDigits: 2,
-                      maximumFractionDigits: 2
+                      maximumFractionDigits: 2,
                     })}
                   </div>
-                  <div className="balance-sub">
-                    Titular: {main.primaryOwnerName}
-                  </div>
+                  <div className="balance-sub">Titular: {main.primaryOwnerName}</div>
                 </div>
               )}
 
@@ -109,7 +106,7 @@ export default function DashboardPage() {
           )}
         </div>
 
-        {/* Lista corta de mis cuentas */}
+        {/* Mis cuentas */}
         <div className="card">
           <h2 className="section-title">Mis cuentas</h2>
 

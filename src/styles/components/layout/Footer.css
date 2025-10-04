@@ -1,9 +1,17 @@
 .public-footer {
   display: flex;
-  justify-content: center; /* centrado */
+  justify-content: center;
   padding: 20px 12px 40px;
 }
 
 .public-footer .health-btn {
   cursor: pointer;
+  transition: 1s;
 }
+
+.health-btn:hover {
+  border: 1px solid;
+  border-color: rgb(12, 202, 37);
+  background-color: rgb(27, 88, 41);
+}
+
