@@ -22,28 +22,48 @@ export default function LoginPage() {
     setBusy(true);
     const { error } = await signIn({ email, password });
     setBusy(false);
-    if (error) setError(error.message || "Invalid credentials");
+    if (error) setError(error.message || "Credenciales inválidas");
     else navigate(redirect, { replace: true });
   }
 
   return (
-    <div className="container">
-      <div className="card auth-card">
-        <h1 className="title">Login</h1>
-        {error && <Alert>{error}</Alert>}
-        <form onSubmit={onSubmit}>
-          <label htmlFor="email">Email</label>
-          <input id="email" type="email" autoComplete="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
+    <div className="auth">
+      <div className="container">
+        <div className="card auth-card">
+          <h1 className="auth-title">Iniciar sesión</h1>
 
-          <label htmlFor="password">Password</label>
-          <input id="password" type="password" autoComplete="current-password" value={password} onChange={(e) => setPassword(e.target.value)} required />
+          {error && <Alert>{error}</Alert>}
 
-          <button disabled={busy} type="submit">{busy ? "Signing in..." : "Sign in"}</button>
-        </form>
+          <form className="auth-form" onSubmit={onSubmit}>
+            <label htmlFor="email">Correo</label>
+            <input
+              id="email"
+              type="email"
+              autoComplete="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
 
-        <p className="hint">
-          No account? <Link to="/register">Register</Link>
-        </p>
+            <label htmlFor="password">Contraseña</label>
+            <input
+              id="password"
+              type="password"
+              autoComplete="current-password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
+
+            <button className="btn-primary" disabled={busy} type="submit">
+              {busy ? "Entrando..." : "Iniciar sesión"}
+            </button>
+          </form>
+
+          <p className="auth-footer">
+            ¿No tienes cuenta? <Link to="/register">Regístrate</Link>
+          </p>
+        </div>
       </div>
     </div>
   );

@@ -1,4 +1,78 @@
-.auth-card { max-width: 420px; margin: 0 auto; }
-.auth-card form { display: grid; gap: 10px; }
-.auth-card .title { margin-top: 0; }
-.hint { color: var(--muted); margin-top: 8px; }
+/* ===== Página de autenticación (login/register) ===== */
+
+.auth {
+  display: grid;
+  place-items: start center;
+  padding: 32px 16px 64px;
+}
+
+/* Tarjeta principal */
+.auth-card {
+  width: min(720px, 92vw);
+  margin-top: 10px;
+  border-radius: 28px;
+  border: 1px solid #373737;
+  box-shadow: 0 8px 24px rgba(0,0,0,.2);
+}
+
+/* Título */
+.auth-title {
+  font-size: 2rem;
+ text-align: center;
+  margin: 0 0 8px;
+  font-weight: 600;
+}
+
+/* Formulario */
+.auth-form {
+  display: grid;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.auth-form label {
+  display: block;
+  font-size: .95rem;
+  font-weight: 400;
+  color: var(--muted);
+  margin: 10px 15px 2px;
+}
+
+.auth-form input {
+  width: 100%;
+  padding: 12px 14px;
+  border-radius: 30px;
+  border: 1px solid #4d4d4d;
+  background: #b1b1b1;
+  color: var(--text);
+}
+
+/* Botón principal */
+.btn-primary {
+  width: 100%;
+  padding: 14px 16px;
+  border-radius: 999px;
+  background: var(--primary-orange);
+  border: 1px solid rgba(255,255,255,.15);
+  color: #fff;
+  margin-top: 30px;
+  font-weight: 700;
+  transition: .7s ease;
+}
+.btn-primary:hover {
+    background: var(--primary);
+}
+/* Pie del formulario */
+.auth-footer {
+  text-align: center;
+  margin-top: 20px;
+  color: var(--muted);
+  font-size: .95rem;
+}
+.auth-footer a { color: var(--primary); }
+
+/* Responsive */
+@media (min-width: 900px) {
+  .auth { padding-top: 5px; }
+  .auth-card { width: min(640px, 90vw); }
+}

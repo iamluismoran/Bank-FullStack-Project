@@ -97,22 +97,22 @@
 /* >= 1024px */
 @media (min-width: 1024px) {
   .hero {
-    padding: 60px 32px 10px;
+    padding: 60px 32px 0px;
   }
   .hero__logo {
-    max-width: 70rem;
+    max-width: 60rem;
   }
   .hero__lead {
-    font-size: 1.15rem;
-    margin-top: 1px;
+    font-size: 1rem;
+    margin: 0;
     max-width: 70rem;
   }
 
   .cards-stack {
-    padding: 110px 56px;
+    padding: 90px 40px;
   }
   .stack {
-    max-width: 40rem;  
+    max-width: 35rem;  
   }
 
   .cards-stack:hover .card-img--a {

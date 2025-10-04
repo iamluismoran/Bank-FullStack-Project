@@ -30,7 +30,6 @@ const router = createBrowserRouter([
       { path: "accounts", element: <AccountsListPage /> },
       { path: "accounts/:id", element: <AccountDetailPage /> },
 
-      // Si decidiste mantener creación/edición, déjalas; si no, quítalas:
       { path: "accounts/new", element: (
         <ProtectedRoute><AccountFormPage /></ProtectedRoute>
       )},
