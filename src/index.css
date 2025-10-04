@@ -1,15 +1,34 @@
 @import "./tokens.css";
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&display=swap');
 
-*{box-sizing:border-box}
-html,body,#root{height:100%}
-body{
-  margin:0;
-  background: #828282;
-  color:var(--text);
-  font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,"Helvetica Neue",Arial
+html {
+  font-family: 'Montserrat', system-ui, -apple-system, 'Segoe UI', Roboto, Ubuntu, Cantarell, 'Helvetica Neue', Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
-a{color:var(--primary);text-decoration:none}
-a.active{font-weight:600}
+
+* { box-sizing: border-box; }
+html, body, #root { height: 100%; }
+
+/* 2) Hace que body herede Montserrat de html */
+body{
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: inherit;
+}
+
+/* 3) Asegura que los controles también usen Montserrat */
+button, input, select, textarea {
+  font: inherit;
+}
+
+a{color:var(--primary);
+  text-decoration:none}
+
+a.active{
+  font-weight:600
+}
 
 :focus-visible{outline:3px solid var(--focus);outline-offset:2px}
 @media (prefers-reduced-motion: reduce){*{transition:none!important;animation:none!important}}
@@ -17,20 +36,27 @@ a.active{font-weight:600}
 button{
   cursor:pointer;border:0;border-radius:var(--radius);
   padding:10px 14px;background:var(--primary);color:#fff;
-  transition:transform .15s ease, background .2s ease
+  transition: 1s;
 }
 button:disabled{opacity:.6;cursor:not-allowed}
 button:active{transform:scale(.98)}
 
 input{
   width:100%;padding:10px 12px;border-radius:10px;
-  border:1px solid #2a335a;background:#0f1530;color:var(--text)
+  border:1px solid #2a335a;
+  background: var(--surface);
+  color: var(--text);
 }
 
 .container{max-width:var(--container);margin:0 auto;padding:16px}
+
 .card{
-  background:var(--surface);border:1px solid #1c244a;border-radius:var(--radius);padding:16px
+  background:var(--surface);
+  border:1px solid #1c244a;
+  border-radius:var(--radius);
+  padding:16px;
 }
+
 .row{display:flex;gap:var(--gap);flex-wrap:wrap;align-items:center}
 .spacer{flex:1}
 

@@ -1,0 +1,9 @@
+.public-footer {
+  display: flex;
+  justify-content: center; /* centrado */
+  padding: 20px 12px 40px;
+}
+
+.public-footer .health-btn {
+  cursor: pointer;
+}

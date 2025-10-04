@@ -1,4 +1,3 @@
-/* Header layout */
 .header { padding-top: 16px; }
 
 .header__bar {
@@ -22,5 +21,51 @@
 
 /* marca */
 .brand {
-  font-weight: 700;
+  font-weight: 800;
+}
+
+/* Marca*/
+.brand__link{
+  display:inline-flex;
+  align-items:center;
+  padding:3px 10px;
+  font-weight:800;
+  transition: 1s;
+}
+.brand__link:hover{ 
+  color: var(--primary-orange);
+}
+/* Enlaces del nav */
+.nav a{
+  position:relative;
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  padding:3px 10px;
+  font-weight:600;
+  transition: 1s;
+}
+.nav a:hover{ 
+  color:var(--primary-orange);
+}
+
+/* Enlace activo de react-router */
+.nav a.active{
+  color:var(--primary);
+  box-shadow:0 0 0 1px var(--primary) inset;
+}
+
+/* Botón Salir del nav*/
+.nav button{
+  font-weight: 600;
+  padding:8px 12px;
+  border-radius:80px;
+  color:var(--text);
+  transition: 1s ease;
+  background-color: transparent;
+}
+.nav button:hover{
+  border-color: #b1b1b1;
+  color: var(--primary-orange);
+  border:1px solid rgba(55, 55, 55, 0.18);
 }

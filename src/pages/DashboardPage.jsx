@@ -58,7 +58,7 @@ export default function DashboardPage() {
     <div className="container">
       <div className="card dashboard-hero">
         <div>
-          <h1 className="title">Hola, {user?.email}</h1>
+          <h1 className="title">Hola, Felipe Boyle</h1>
           <p className="muted">Resumen de tus productos</p>
         </div>
         {!!main && (

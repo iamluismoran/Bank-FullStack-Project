@@ -1,0 +1,129 @@
+.hero{
+  display:grid;
+  justify-items:center;
+  row-gap:10px;
+  padding:48px 16px 24px;
+}
+
+.hero__logo{
+  max-width: 900px;
+  width: 100%;
+  height:auto;
+}
+
+.hero__lead{
+  margin:2px 0 0;
+  text-align:center;
+  color:var(--muted);
+}
+
+/* ===== TARJETAS ===== */
+.cards-stack{
+  display:flex;
+  justify-content:center;
+  padding:70px 100px;   
+  background:transparent;
+}
+
+.stack{
+  position:relative;
+  width:100%;
+  max-width: 30rem;   
+  aspect-ratio:16 / 10; 
+}
+
+.card-img{
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  border-radius:14px;
+  box-shadow:none;
+  transform:translateX(0) translateY(0) rotate(0deg);
+  transition: 3s ease, box-shadow .4s ease;
+}
+
+.cards-stack:hover .card-img--a{
+  transform:translateX(-50px) translateY(-30px) rotate(-5deg);
+  box-shadow:0 24px 48px rgba(0,0,0,.22);
+  z-index:1;
+}
+.cards-stack:hover .card-img--b{
+  transform:translateX(70px) translateY(10px) rotate(7deg);
+  box-shadow:0 24px 48px rgba(0,0,0,.42);
+  z-index:1;
+}
+
+/* ===== CTA FINAL ===== */
+.cta-bottom{
+  display:flex;
+  justify-content:center;
+  padding:8px 16px 24px;
+}
+
+.cta-bottom__group{
+  display:inline-flex;
+  gap:12px;
+  flex-wrap:wrap;
+  justify-content:center;
+}
+
+.btn{
+  appearance:none;
+  border:1px solid rgba(255,255,255,.15);
+  background:var(--primary-gray);
+  color:white;
+  padding:10px 16px;
+  border-radius:60px;
+  cursor:pointer;
+  transition: 1s;
+}
+
+.btn:hover{
+    transform:translateY(-1px);
+    background:var(--primary);}
+
+.btn--primary{
+  border-color:var(--secondary);
+  background:var(--primary-orange);
+  color:#ffffff;
+  font-weight:600;
+  transition: 1s;
+}
+.btn--primary:hover{
+    background-color: rgb(203, 72, 7)}
+
+/* >= 1024px */
+@media (min-width: 1024px) {
+  .hero {
+    padding: 60px 32px 10px;
+  }
+  .hero__logo {
+    max-width: 70rem;
+  }
+  .hero__lead {
+    font-size: 1.15rem;
+    margin-top: 1px;
+    max-width: 70rem;
+  }
+
+  .cards-stack {
+    padding: 110px 56px;
+  }
+  .stack {
+    max-width: 40rem;  
+  }
+
+  .cards-stack:hover .card-img--a {
+    transform: translateX(-36px) translateY(-20px) rotate(-3.5deg);
+  }
+  .cards-stack:hover .card-img--b {
+    transform: translateX(42px) translateY(10px) rotate(4deg);
+  }
+
+  .btn {
+    padding: 13px 20px;
+    font-size: 1.0625rem;
+  }
+}
