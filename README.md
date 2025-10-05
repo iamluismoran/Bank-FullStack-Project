@@ -17,8 +17,9 @@ Backend (Spring Boot)
 ```bash
 
 # 1) Clonar repositorio
-     git clone https://github.com/iamluismoran/Bank-FullStack-Project.git
-
+     git clone https://github.com/iamluismoran/bankBack.git
+     cd bankBank
+    
 # 2) Configurar MySQL en `application.properties`.
      Ver sección en Variables de entorno
 
@@ -31,8 +32,8 @@ Backend (Spring Boot)
 
 Frontend (Vite + React)
 ```bash
-
-# 1) En otra terminal, ir a la carpeta del front
+# 1) git clone
+     https://github.com/iamluismoran/Bank-FullStack-Project.git
      cd my-front
 
 # 2) Instalar dependencias

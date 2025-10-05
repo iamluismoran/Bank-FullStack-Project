@@ -28,7 +28,7 @@ export default function DashboardPage() {
     return checking || myAccounts[0];
   }, [myAccounts]);
 
-  // Estado para el balance (en lugar de pedir el detalle completo)
+  // Estado para el balance
   const [balance, setBalance] = useState(null);
   const [loadingBalance, setLoadingBalance] = useState(false);
   const [balanceError, setBalanceError] = useState("");

@@ -1,0 +1,42 @@
+.transfer-header { margin-bottom: 12px; }
+
+.transfer-form {
+  display: grid;
+  gap: 12px;
+  max-width: 520px;
+}
+
+.form-row label {
+  display: block;
+  margin-bottom: 6px;
+  color: var(--muted);
+  font-weight: 600;
+}
+
+.form-row input {
+  width: 100%;
+  padding: 12px 14px;
+  border-radius: 10px;
+  border: 1px solid #4d4d4d;
+  background: var(--surface, #fff);
+  color: var(--text, #222);
+  font-size: 1rem;
+  outline: none;
+}
+
+.form-row input:focus {
+  border-color: var(--accent, #7a7a7a);
+  box-shadow: 0 0 0 3px rgba(0,0,0,.05);
+}
+
+.form-row input[type="number"] {
+  -moz-appearance: textfield;
+  appearance: textfield;
+}
+
+.form-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 6px;
+}

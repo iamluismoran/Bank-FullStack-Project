@@ -9,6 +9,7 @@ import RegisterPage from "../pages/RegisterPage";
 import DashboardPage from "../pages/DashboardPage";
 import ProtectedRoute from "./ProtectedRoute";
 import { useAuth } from "../context/AuthContext";
+import TransferPage from "../pages/TransferPage";
 
 function IndexSwitch() {
   const { user } = useAuth();
@@ -29,6 +30,10 @@ const router = createBrowserRouter([
       )},
       { path: "accounts", element: <AccountsListPage /> },
       { path: "accounts/:id", element: <AccountDetailPage /> },
+
+      { path: "accounts/:id/transfer", element: (
+        <ProtectedRoute><TransferPage /></ProtectedRoute>
+      )},
 
       { path: "accounts/new", element: (
         <ProtectedRoute><AccountFormPage /></ProtectedRoute>

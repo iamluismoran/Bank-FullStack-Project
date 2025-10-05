@@ -43,6 +43,33 @@ export async function getAccountBalance(id) {
   return Number(data?.balance ?? data?.amount ?? 0);
 }
 
+/**
+ * POST /api/accounts/transfer
+ */
+export async function transfer({ fromAccountId, toAccountId, amount, requestOwnerId }) {
+  const payload = {
+    fromAccountId: Number(fromAccountId),
+    toAccountId: Number(toAccountId),
+    amount: Number(amount),
+    requestOwnerId: Number(requestOwnerId),
+  };
+
+  const res = await fetch(`/api/accounts/transfer`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json", Accept: "application/json" },
+    body: JSON.stringify(payload),
+  });
+
+  if (!res.ok) {
+    let msg = `Error al transferir: ${res.status}`;
+    try { msg += ` - ${await res.text()}`; } catch {}
+    throw new Error(msg);
+  }
+  if (res.status === 204) return true;
+  try { return await res.json(); } catch { return true; }
+}
+
+
 /* ===========================
  *      CREATE (3 tipos)
  * =========================== */

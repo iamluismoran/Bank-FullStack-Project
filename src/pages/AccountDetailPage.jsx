@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { getAccount, getAccountBalance } from "../api/accounts";
 import Spinner from "../components/feedback/Spinner";
 import Alert from "../components/feedback/Alert";
@@ -7,6 +7,7 @@ import "../styles/pages/AccountDetailPage.css";
 
 export default function AccountDetailPage() {
   const { id } = useParams();
+  const navigate = useNavigate();
 
   // Detalle
   const [account, setAccount] = useState(null);
@@ -48,7 +49,8 @@ export default function AccountDetailPage() {
     setLoadingBal(true);
     try {
       const data = await getAccountBalance(id);
-      setBalance(typeof data === "number" ? data : (data?.balance ?? 0));
+      const b = typeof data === "number" ? data : (data?.balance ?? 0);
+      setBalance(b);
     } catch (e) {
       setBalError(e?.message || "No se pudo obtener el saldo");
     } finally {
@@ -106,9 +108,14 @@ export default function AccountDetailPage() {
       <div className="card">
         <div className="balance-row">
           <h2 className="section-title">Saldo actual</h2>
-          <button type="button" onClick={refreshBalance} disabled={loadingBal}>
-            {loadingBal ? "Actualizando..." : "Actualizar saldo"}
-          </button>
+          <div className="row" style={{ gap: 8 }}>
+            <button type="button" onClick={refreshBalance} disabled={loadingBal}>
+              {loadingBal ? "Actualizando..." : "Actualizar saldo"}
+            </button>
+            <button type="button" onClick={() => navigate(`/accounts/${id}/transfer`)}>
+              Transferir
+            </button>
+          </div>
         </div>
 
         {balError ? (
