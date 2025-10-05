@@ -40,3 +40,52 @@
   flex-wrap: wrap;
   margin-top: 6px;
 }
+
+/* === Botones Transfer === */
+.form-actions button{
+  border-radius: 999px;
+  padding: 12px 18px;
+  font-weight: 700;
+  border: 1px solid transparent;
+  transition: transform .06s ease, box-shadow .2s ease, background .2s ease, color .2s ease, border-color .2s ease;
+}
+
+/* Confirmar (primer botón) */
+.form-actions button:first-of-type{
+  background: var(--primary-orange);
+  border-color: var(--primary-orange);
+  color: #fff;
+}
+.form-actions button:first-of-type:hover{
+  transform: translateY(-1px);
+  box-shadow: 0 8px 18px rgba(0,0,0,.18);
+}
+.form-actions button:first-of-type:active{
+  transform: translateY(0);
+  box-shadow: none;
+}
+
+/* Cancelar */
+.form-actions button:last-of-type{
+  background: var(--primary);
+  font-weight: 500;
+  color: rgb(241, 241, 241);
+  border-color: #777;
+  transition: 1s ease;
+}
+.form-actions button:last-of-type:hover{
+  background: var(--primary-orange);
+}
+
+/* Quita spinners en inputs con la clase .no-spin */
+/* Chrome, Edge, Safari, Opera */
+.no-spin::-webkit-outer-spin-button,
+.no-spin::-webkit-inner-spin-button {
+  -webkit-appearance: none !important;
+  margin: 0 !important;
+}
+/* Firefox */
+.no-spin {
+  -moz-appearance: textfield !important;
+  appearance: textfield !important;
+}

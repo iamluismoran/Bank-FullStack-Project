@@ -63,6 +63,12 @@ export default function TransferPage() {
     navigate(`/accounts/${fromId}`, { replace: true });
   }
 
+  // Evita cambiar valores con rueda o flechas ↑/↓
+  const blockWheel = (e) => e.currentTarget.blur();
+  const blockArrows = (e) => {
+    if (e.key === "ArrowUp" || e.key === "ArrowDown") e.preventDefault();
+  };
+
   return (
     <div className="container">
       <div className="card transfer-header">
@@ -83,9 +89,12 @@ export default function TransferPage() {
             <input
               id="fromId"
               type="number"
+              className="no-spin"
               value={fromId}
               readOnly
               aria-readonly="true"
+              onWheel={blockWheel}
+              onKeyDown={blockArrows}
             />
           </div>
 
@@ -94,10 +103,13 @@ export default function TransferPage() {
             <input
               id="toId"
               type="number"
+              className="no-spin"
               value={toId}
               onChange={(e) => setToId(e.target.value)}
               required
               inputMode="numeric"
+              onWheel={blockWheel}
+              onKeyDown={blockArrows}
             />
           </div>
 
@@ -106,17 +118,20 @@ export default function TransferPage() {
             <input
               id="amount"
               type="number"
+              className="no-spin"
               min="0.01"
               step="0.01"
               value={amount}
               onChange={(e) => setAmount(e.target.value)}
               required
               inputMode="decimal"
+              onWheel={blockWheel}
+              onKeyDown={blockArrows}
             />
           </div>
 
           <div className="form-actions">
-            <button type="submit" disabled={busy}>
+            <button className="confirm" type="submit" disabled={busy}>
               {busy ? "Enviando..." : "Confirmar transferencia"}
             </button>
             <Link to={`/accounts/${fromId}`}>

@@ -108,11 +108,21 @@ export default function AccountDetailPage() {
       <div className="card">
         <div className="balance-row">
           <h2 className="section-title">Saldo actual</h2>
-          <div className="row" style={{ gap: 8 }}>
-            <button type="button" onClick={refreshBalance} disabled={loadingBal}>
+          <div className="actions">
+            <button
+              type="button"
+              className="btn-ghost"
+              onClick={refreshBalance}
+              disabled={loadingBal}
+            >
               {loadingBal ? "Actualizando..." : "Actualizar saldo"}
             </button>
-            <button type="button" onClick={() => navigate(`/accounts/${id}/transfer`)}>
+
+            <button
+              type="button"
+              className="btn-transfer"
+              onClick={() => navigate(`/accounts/${id}/transfer`)}
+            >
               Transferir
             </button>
           </div>

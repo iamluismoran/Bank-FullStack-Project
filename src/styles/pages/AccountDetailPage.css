@@ -31,15 +31,44 @@
   margin-top: 6px;
 }
 
+/* ghost = Actualizar saldo */
+.balance-row .actions .btn-ghost{
+  font-weight: 500;
+  background: var(--text);
+  color: #f3f3f3;
+  transition: 1s ease;
+}
+.balance-row .actions .btn-ghost:hover{
+  transform: translateY(-1px);
+  color: white;
+  background-color: var(--primary-orange);
+}
+
+/* primary = Transferir */
+.balance-row .actions .btn-transfer{
+  font-weight: 500;
+  background: var(--text);
+  color: #f3f3f3;
+  transition: 1s ease;
+}
+.balance-row .actions .btn-transfer:hover{
+  background-color: var(--primary-orange);
+  color: white;
+  transform: translateY(-1px);
+}
+
 /* Dos columnas inferiores */
 .two-col{
   display: grid;
   gap: 20px;
 }
 @media (min-width: 900px){
-  .two-col{ grid-template-columns: 1fr 1fr;
-    gap: 24px; }
+  .two-col{
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+  }
 }
+
 .kv{
   display: grid;
   gap: 10px;
@@ -48,10 +77,7 @@
   color: var(--muted);
   margin-right:8px;
 }
-
 .kv div{
   display: flex;
   justify-content: space-between;
 }
-
-
