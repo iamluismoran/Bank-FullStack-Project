@@ -38,7 +38,7 @@ Frontend (Vite + React)
 # 2) Instalar dependencias
      npm install
 
-# 3) Crear .env y luego
+# 3) Crear .env y arrancar
      npm run dev
 
 Front disponible en http://localhost:5173
@@ -55,7 +55,7 @@ Front disponible en http://localhost:5173
 ##  Variables de entorno
 
 Backend (Spring Boot)
-`bankback/src/main/resources/application.properties`
+Ruta: `bankback/src/main/resources/application.properties`
 ```bash
 #---- App ----
 spring.application.name=bankback
@@ -82,7 +82,7 @@ server.error.include-stacktrace=never
 server.error.include-exception=false
 
 ```
-> Nota: `ddl-auto=create-drop` es cómodo para desarrollo (recrea el esquema).
+> Nota: `ddl-auto=create-drop` es cómodo para desarrollo (recrea el esquema en cada arranque).
 
 
 Frontend (Vite + React)
@@ -94,7 +94,7 @@ VITE_API_URL=http://localhost:8080/api
 
 ```
 
-## Estructura de controladores y rutas
+## API Endpoints
 
 
 | Método     | Endpoint                        | Descripción                                                                                           |
@@ -102,11 +102,16 @@ VITE_API_URL=http://localhost:8080/api
 | `GET`      | `/api/health`                   | Verifica que la API y la BD estén disponibles                                                         |
 | `GET`      | `/api/accounts`                 | Lista de cuentas con paginación y búsqueda. Query: `search`, `page`, `pageSize`.                      |
 | `GET`      | `/api/accounts/{id}`            | Detalle de una cuenta |
-| `GET`      | `/api/accounts/{id}/balance`    | Obtiene el balance “vivo” aplicando reglas (intereses/penalizaciones)                |
-| `POST`      | `/api/accounts/transfer`       | Transferencia entre cuentas del banco (valida secretos / reglas)                              |
-
+| `GET`      | `/api/accounts/{id}/balance`    | Obtiene el balance “vivo” aplicando reglas (intereses/penalizaciones)                                 |
+| `POST`     | `/api/accounts/transfer`       | Transferencia entre cuentas del banco (valida secretos / reglas)                                       |
+| `POST`     | `/api/admin/accounts/checking-or-student`    | Crea cuenta `Checking / Student` .                                                       |
+| `POST`     | `/api/admin/accounts/saving`       | Crea una cuenta `Savings`.                                                                         |
+| `POST`     | `/api/admin/accounts/credit-card`  | Crea una cuenta `Credit card`.                                                                     |
+| `PATCH`    | `/api/admin/accounts/{id}/status?status=`   |Cambia estado de la cuenta (por ej. `ACTIVE, FROZEN`).                                     |
+| `DELETE`   | `/api/admin/accounts/{id}`  | Elimina una cuenta.                                                                                       |
 
 > Comportamiento de Home: si hay sesión activa, redirige a Dashboard; si no, muestra la Landing Page.
+> En el front hay un botón `Probar conexión` (consulta `GET /api/health`) que muesttra Conexión abierta / Sin conexión.
 
 
 ## Tecnologías
