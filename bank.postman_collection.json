@@ -1,0 +1,509 @@
+{
+	"info": {
+		"_postman_id": "c1b02847-8026-4e76-b6ad-60ad4368a36a",
+		"name": "BankBack+",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "46784539",
+		"_collection_link": "https://elias-9889465.postman.co/workspace/a71ed6fb-4ec0-477b-881f-7c909c76b236/collection/46784539-c1b02847-8026-4e76-b6ad-60ad4368a36a?action=share&source=collection_link&creator=46784539"
+	},
+	"item": [
+		{
+			"name": "ACCOUNTS",
+			"item": [
+				{
+					"name": "01 GET BALANCE (FEL CHK)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// 1) Debe responder 200 OK\r",
+									"pm.test(\"200 OK\", function () {\r",
+									"  pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"// 2) Debe venir JSON\r",
+									"pm.test(\"Content-Type JSON\", function () {\r",
+									"  pm.expect(pm.response.headers.get(\"Content-Type\"))\r",
+									"    .to.include(\"application/json\");\r",
+									"});\r",
+									"\r",
+									"// 3) Extraer el balance\r",
+									"const body = pm.response.json();\r",
+									"const balance = (typeof body === \"number\") ? body : body.balance;\r",
+									"\r",
+									"// 4) El balance debe ser un número válido\r",
+									"pm.test(\"Balance es un número válido\", function () {\r",
+									"  pm.expect(balance).to.be.a(\"number\");\r",
+									"  pm.expect(Number.isFinite(balance)).to.be.true;\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/accounts/{{acc_felipe_chk}}/balance",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"accounts",
+								"{{acc_felipe_chk}}",
+								"balance"
+							]
+						},
+						"description": "## Get Account Balance\n\nThis endpoint retrieves the current balance for a specified account.\n\n### Request\n\n- **Method:** GET\n    \n- **Endpoint:** `{{base_url}}/api/accounts/{{acc_felipe_chk}}/balance`\n    \n\n#### Path Parameters\n\n- `acc_felipe_chk`: The unique identifier for the account whose balance is being queried.\n    \n\n### Response\n\n- **Status Code:** 200 OK\n    \n- **Content-Type:** application/json\n    \n- { \"balance\": 0, \"accountId\": 0}\n    \n\n#### Response Fields\n\n- `balance`: The current balance of the account (numeric).\n    \n- `accountId`: The unique identifier for the account (numeric).\n    \n\n### Notes\n\n- Ensure that the account identifier provided in the request is valid to receive the correct balance information.\n    \n- A balance of `0` indicates that there are no funds available in the account."
+					},
+					"response": []
+				},
+				{
+					"name": "02 POST TRANSFER (F -> S)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Fixed syntax error in test script\r",
+									"pm.test(\"OK (200/201/204)\", () => [200, 201, 204].includes(pm.response.code));\r",
+									"\r",
+									"// Leemos el body en texto\r",
+									"const text = pm.response.text();\r",
+									"\r",
+									"// Si hay contenido, validamos JSON; si no, aceptamos 204 sin body\r",
+									"if (text && text.trim().length > 0) {\r",
+									"  pm.test(\"Content-Type JSON\", () =>\r",
+									"    (pm.response.headers.get(\"Content-Type\") || \"\").includes(\"application/json\")\r",
+									"  );\r",
+									"\r",
+									"  let body;\r",
+									"  pm.test(\"Body es JSON parseable\", () => {\r",
+									"    body = pm.response.json();\r",
+									"    return true;\r",
+									"  });\r",
+									"\r",
+									"  pm.test(\"Sin error en la respuesta\", () => !body?.error);\r",
+									"\r",
+									"  // Si la API devuelve el monto en la respuesta, lo comparamos\r",
+									"  const req = pm.request.body?.raw ? JSON.parse(pm.request.body.raw) : null;\r",
+									"  const sentAmount = Number(req?.amount);\r",
+									"  const respAmount = Number(body?.amount ?? body?.transferAmount);\r",
+									"  if (!Number.isNaN(respAmount)) {\r",
+									"    pm.test(\"Monto en respuesta coincide\", () => respAmount === sentAmount);\r",
+									"  }\r",
+									"} else {\r",
+									"  pm.test(\"Respuesta vacía permitida (204)\", () => pm.response.code === 204);\r",
+									"}\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"fromAccountId\": 1,\r\n    \"toAccountId\": 2,\r\n    \"amount\": {{amt_mid}},\r\n    \"requestOwnerId\": {{owner_felipe}}\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/accounts/transfer",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"accounts",
+								"transfer"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "03 GET BALANCE (SOF)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/accounts/{{acc_sofia_sav}}/balance",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"accounts",
+								"{{acc_sofia_sav}}",
+								"balance"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "POST TRANSFER AMT BIG",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"fromAccountId\": 5,\r\n    \"toAccountId\": 2,\r\n    \"amount\": {{amt_big}},\r\n    \"requestOwnerId\": {{owner_eve}}\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/accounts/transfer",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"accounts",
+								"transfer"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "ADMIN",
+			"item": [
+				{
+					"name": "04 POST CREATE CHECKING/STUDENT",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"primaryOwnerId\": {{owner_eve}},\r\n    \"secondaryOwnerId\": null,\r\n    \"initialAmount\": {{amt_mid}},\r\n    \"secretKey\": \"EVE-NEW-001\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/admin/accounts/checking-or-student",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"admin",
+								"accounts",
+								"checking-or-student"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "POST CRATE SAVINGS",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"primaryOwnerId\": {{owner_sofia}},\r\n  \"secondaryOwnerId\": null,\r\n  \"initialAmount\": 2500,\r\n  \"secretKey\": \"SOF-NEW-001\",\r\n  \"minimumBalance\": 1000,\r\n  \"interestRate\": 0.0025\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/admin/accounts/savings",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"admin",
+								"accounts",
+								"savings"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "POST CREATE CREDIT CARD (FEL)",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"primaryOwnerId\": {{owner_felipe}},\r\n  \"secondaryOwnerId\": null,\r\n  \"initialAmount\": 0,\r\n  \"creditLimit\": 1500,\r\n  \"interestRate\": 0.2\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/admin/accounts/credit-card",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"admin",
+								"accounts",
+								"credit-card"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "PATCH CHANGE STATUS",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/admin/accounts/2/status?status=FROZEN",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"admin",
+								"accounts",
+								"2",
+								"status"
+							],
+							"query": [
+								{
+									"key": "status",
+									"value": "FROZEN"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "PATCH CHANGE STATUS ACTIVE",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/admin/accounts/2/status?status=ACTIVE",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"admin",
+								"accounts",
+								"2",
+								"status"
+							],
+							"query": [
+								{
+									"key": "status",
+									"value": "ACTIVE"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DELETE CREDIT CARD",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/admin/accounts/{{acc_felipe_cc}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"admin",
+								"accounts",
+								"{{acc_felipe_cc}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DELETE ACCOUNT",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/admin/accounts/{{acc_sofia_sav}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"admin",
+								"accounts",
+								"{{acc_sofia_sav}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "GET LISTADO",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/api/accounts/1",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"accounts",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET HEALTH",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// 1) HTTP 200 OK\r",
+							"pm.test(\"HTTP 200 OK\", () => pm.response.to.have.status(200));\r",
+							"\r",
+							"// 2) Respuesta en < 800 ms\r",
+							"pm.test(\"Respuesta rápida (<800ms)\", () => {\r",
+							"  pm.expect(pm.response.responseTime).to.be.below(800);\r",
+							"});\r",
+							"\r",
+							"// 3) Es JSON\r",
+							"pm.test(\"Devuelve JSON\", () => {\r",
+							"  pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\");\r",
+							"});\r",
+							"\r",
+							"// 4) Campos esperados: db y status = UP/OK (case-insensitive)\r",
+							"const json = pm.response.json();\r",
+							"const upOk = v => String(v || \"\").toUpperCase();\r",
+							"\r",
+							"pm.test(\"db es UP/OK\", () => {\r",
+							"  pm.expect(upOk(json.db)).to.be.oneOf([\"UP\", \"OK\"]);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"status es UP/OK\", () => {\r",
+							"  pm.expect(upOk(json.status)).to.be.oneOf([\"UP\", \"OK\"]);\r",
+							"});\r",
+							"\r",
+							"// 5) Guarda una variable útil\r",
+							"pm.collectionVariables.set(\"health_status\", json.status || json.db || \"unknown\");\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/api/health",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"health"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET BY NAME",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/api/accounts?search=felipe&page=1&pageSize=10",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"accounts"
+					],
+					"query": [
+						{
+							"key": "search",
+							"value": "felipe"
+						},
+						{
+							"key": "page",
+							"value": "1"
+						},
+						{
+							"key": "pageSize",
+							"value": "10"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET DETAIL",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/api/accounts/1",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"accounts",
+						"1"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"variable": [
+		{
+			"key": "health_status",
+			"value": ""
+		}
+	]
+}

@@ -35,13 +35,13 @@ Frontend (Vite + React)
 # 1) En otra terminal, ir a la carpeta del front
      cd my-front
 
-# 2) Instañar dependencias
+# 2) Instalar dependencias
      npm install
 
 # 3) Crear .env y luego
      npm run dev
 
-# Front disponible en http://localhost:5173
+Front disponible en http://localhost:5173
 
 ```
 
@@ -55,7 +55,7 @@ Frontend (Vite + React)
 ##  Variables de entorno
 
 Backend (Spring Boot)
-`bankback/src/main/resources/apPlication.properties`
+`bankback/src/main/resources/application.properties`
 ```bash
 #---- App ----
 spring.application.name=bankback
@@ -82,7 +82,7 @@ server.error.include-stacktrace=never
 server.error.include-exception=false
 
 ```
-> Nota: `ddl-auto=create-drop` es cómodo para desarrollo (recrea el esquema). Para producción usa update o migra con Flyway/Liquibase.
+> Nota: `ddl-auto=create-drop` es cómodo para desarrollo (recrea el esquema).
 
 
 Frontend (Vite + React)
