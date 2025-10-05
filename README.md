@@ -1,13 +1,49 @@
-# REGALBANK
+# RegalBank
 
 ## Descripción del Proyecto
 
-**BankBack** es una aplicación utilizada para simular un sistema bancario.
+**RegalBank** es una aplicación full-stack didáctica que simula un sistema bancario.
 
 - Backend: Spring Boot (Java 17), MySQL, JPA/Hibernate.
+  Expone una API REST con tres áreas: Cuentas, Administración de cuentas y Terceros.
 - Frontend: React + Vite, Auth con Supabase, SPA protegida con rutas privadas.
+  Implementa el portal del cliente (no incluye UI de administración).
 
-Esta apliación permite la gestión de cuentas bancarias, usuarios y operaciones básicas como consultas, transferencias, creación de cuentas por parte del administrador y movimientos de terceros. El sistema implementa reglas de negocio como mínimos, comisiones, intereses y penalizaciones.
+La solución permite gestionar cuentas bancarias, usuarios y operaciones como consulta de saldos, listado/detalle de cuentas y (a nivel de API) transferencias internas, alta/baja de cuentas y cambio de estado. Se aplican reglas de negocio como mínimos, comisiones, intereses y penalizaciones al calcular balances.
+
+## Arranque local
+
+Backend (Spring Boot)
+```bash
+
+# 1) Clonar repositorio
+     git clone https://github.com/iamluismoran/Bank-FullStack-Project.git
+
+# 2) Configurar MySQL en `application.properties`.
+     Ver sección en Variables de entorno
+
+# 3) Levantar la API
+     ./mvnw spring-boot:run
+     #API disponible en http://localhost:8080
+     #Health check: http://localhost:8080/api/health
+
+```
+
+Frontend (Vite + React)
+```bash
+
+# 1) En otra terminal, ir a la carpeta del front
+     cd my-front
+
+# 2) Instañar dependencias
+     npm install
+
+# 3) Crear .env y luego
+     npm run dev
+
+# Front disponible en http://localhost:5173
+
+```
 
 ## Requisitos
 
@@ -16,12 +52,10 @@ Esta apliación permite la gestión de cuentas bancarias, usuarios y operaciones
 - Node.js 18+ y npm
 - Supabase
 
-
-
 ##  Variables de entorno
 
 Backend (Spring Boot)
-`bankback/src/main/resources/aplication.properties`
+`bankback/src/main/resources/apPlication.properties`
 ```bash
 #---- App ----
 spring.application.name=bankback
@@ -47,8 +81,9 @@ server.error.include-binding-errors=never
 server.error.include-stacktrace=never
 server.error.include-exception=false
 
-
 ```
+> Nota: `ddl-auto=create-drop` es cómodo para desarrollo (recrea el esquema). Para producción usa update o migra con Flyway/Liquibase.
+
 
 Frontend (Vite + React)
 
@@ -73,28 +108,40 @@ VITE_API_URL=http://localhost:8080/api
 
 > Comportamiento de Home: si hay sesión activa, redirige a Dashboard; si no, muestra la Landing Page.
 
-## Notas de desarrollo
-- Auth: se usa Supabase (email + password). El correo del usuario se muestra en el header, el logout limpia la sesión y devuelve a `/login`.
-- Owner ID: el front guarda un `ownerId` asociado al usuario para filtrar "Mis cuentas". Esto se persiste como user_metadata en Supabase(y se cachea en `localStorage` para usabilidad).
-- Balance en Dahsboard: se prioriza la cuente `CHECKING` como cuenta principal. Para su saldo se llama `/api/accounts/{id}/balance`.
-- Estilos: se homogenizó el CSS (tarjetas, jerarquía, tipografías).
 
 ## Tecnologías
-Backend
-- Java 17, Spring Boot 3
-- Spring Data JPA / Hibernate
-- MySQL
-- Maven
-- JUnit 5
 
-Frontend
-- React 19 + Vite
-- React Router
-- @tanstack/react-query
-- CSS modular por páginas
+| Área                | Tecnologías                                                                 |
+|---------------------|------------------------------------------------------------------------------|
+| **Frontend**        | React + Vite, React Router, CSS modular por páginas                |
+| **Autenticación**   | Supabase Auth (email/password, `user_metadata` para `ownerId`)              |
+| **Backend**         | Java 17, Spring Boot 3, Spring Web, Spring Data JPA (Hibernate)             |
+| **Base de datos**   | MySQL 8 (local)                                                              |
+| **Testing**         | JUnit 5 (backend)                                                            |
+| **Tooling**         | Maven, Node.js (npm), Postman, DBeaver                    |
+| **Dev/Build**       | Vite Dev Server (5173), Spring Boot (8080)                                   |
 
+
+## Notas de desarrollo
+- Auth, se usa Supabase (email + password). El correo del usuario se muestra en el header, el logout limpia la sesión y devuelve a `/login`.
+- Owner ID en el front guarda un `ownerId` asociado al usuario para filtrar "Mis cuentas". Esto se persiste como user_metadata en Supabase(y se cachea en `localStorage` para usabilidad).
+- Balance en Dashboard, se prioriza la cuenta `CHECKING` como cuenta principal. Para su saldo se llama `/api/accounts/{id}/balance`.
+- Estilos unificados (tarjetas, jerarquía, tipografías).
+
+Capacidades de adminstración
+- Crear cuentas (`Checking/Student`, `Savings`, `Credit Card`).
+- Cambiar estado `(ACTIVE/FROZEN)`.
+- Eliminar cuentas.
+
+> Estas acciones se prueban con Postman; no hay interfaz Visual en el front. 
+
+## Mejoras futuras
+- Interfaz de administración (web) para las operaciones ya disponibles en la API.
+- Roles y permisos (clientes / admin) y vistas separadas.
+- Transferencias desde el front, historial y movimientos.
+- Auditoría y registro de actividad.
+- Tareas programadas para aplicar comisiones/intereses periódicos
 
 ## Autor del Proyecto
 - Autor: Luis Elías Morán
 - GitHub: [iamluismoran](https://github.com/iamluismoran)
-
